@@ -63,8 +63,8 @@ The three core actions a user should be able to perform in PawPal+ are: 1. Add a
 
 **b. Tradeoffs**
 
-- Describe one tradeoff your scheduler makes.
-- Why is that tradeoff reasonable for this scenario?
+- The conflict detection algorithm only checks for multiple tasks scheduled on the same due date, rather than detecting overlapping time slots.
+- This tradeoff is reasonable for this scenario because the current system doesn't assign specific start times to tasks, keeping the implementation simple while still alerting users to potential scheduling conflicts on busy days.
 
 ---
 
