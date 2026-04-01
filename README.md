@@ -42,6 +42,22 @@ pip install -r requirements.txt
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
 
+## Features
+
+PawPal+ includes the following smart features:
+
+- **Task Management**: Add pets and assign care tasks with priorities, durations, and frequencies
+- **Intelligent Scheduling**: Generate optimized daily schedules based on available time, task priorities, and completion status
+- **Sorting by Time**: Sort tasks by duration for better planning
+- **Advanced Filtering**: Filter tasks by completion status or specific pets
+- **Recurring Tasks**: Automatic creation of daily/weekly recurring tasks when completed
+- **Conflict Detection**: Warn about multiple tasks scheduled on the same date
+- **Persistent Sessions**: Data persists across page refreshes using Streamlit session state
+
+## 📸 Demo
+
+<a href="/course_images/ai110/pawpal_demo.png" target="_blank"><img src='/course_images/ai110/pawpal_demo.png' title='PawPal+ App Demo' width='' alt='PawPal+ App Demo' class='center-block' /></a>
+
 ## Testing PawPal+
 
 Run the test suite with:

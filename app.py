@@ -92,9 +92,65 @@ if 'owner' in st.session_state:
     if all_tasks:
         st.write("Current tasks:")
         for t in all_tasks:
-            st.write(f"- {t.description} ({t.time} min, priority {t.priority})")
+            status = "✅" if t.completed else "⏳"
+            st.write(f"{status} {t.description} ({t.time} min, priority {t.priority}, due {t.due_date})")
     else:
         st.info("No tasks yet. Add one above.")
+
+st.markdown("### Task Management")
+if 'owner' in st.session_state and st.session_state.owner.pets:
+    # Sorting
+    if st.button("Sort Tasks by Time"):
+        scheduler = Scheduler(st.session_state.owner, 24)  # dummy time
+        sorted_tasks = scheduler.sort_tasks_by_time()
+        if sorted_tasks:
+            st.write("Tasks sorted by duration:")
+            for t in sorted_tasks:
+                st.write(f"- {t.description} ({t.time} min)")
+        else:
+            st.info("No tasks to sort.")
+    
+    # Filtering
+    filter_options = ["All", "Completed", "Incomplete"] + [p.name for p in st.session_state.owner.pets]
+    filter_choice = st.selectbox("Filter tasks", filter_options)
+    
+    if st.button("Apply Filter"):
+        if filter_choice == "All":
+            filtered = st.session_state.owner.get_all_tasks()
+        elif filter_choice == "Completed":
+            filtered = st.session_state.owner.get_tasks_by_status(True)
+        elif filter_choice == "Incomplete":
+            filtered = st.session_state.owner.get_tasks_by_status(False)
+        else:
+            filtered = st.session_state.owner.get_tasks_by_pet(filter_choice)
+        
+        if filtered:
+            st.write(f"Filtered tasks ({filter_choice}):")
+            for t in filtered:
+                st.write(f"- {t.description}")
+        else:
+            st.info("No tasks match the filter.")
+    
+    # Mark task complete
+    if all_tasks:
+        task_options = [f"{t.description} ({t.time} min)" for t in all_tasks if not t.completed]
+        if task_options:
+            selected_task_str = st.selectbox("Select task to mark complete", task_options)
+            if st.button("Mark Complete"):
+                # Find the task
+                selected_desc = selected_task_str.split(" (")[0]
+                task_to_complete = next((t for t in all_tasks if t.description == selected_desc and not t.completed), None)
+                if task_to_complete:
+                    # Find the pet
+                    for pet in st.session_state.owner.pets:
+                        if task_to_complete in pet.tasks:
+                            pet.mark_task_complete(task_to_complete)
+                            st.success(f"Marked '{selected_desc}' complete. New recurring task created if applicable.")
+                            break
+                else:
+                    st.error("Task not found.")
+        else:
+            st.info("All tasks are completed.")
 
 st.divider()
 
@@ -112,5 +168,14 @@ if st.button("Generate schedule"):
                 st.write(f"- {t.description} ({t.time} min)")
         else:
             st.info("No tasks fit in the available time.")
+        
+        # Show conflicts
+        conflicts = scheduler.detect_conflicts()
+        if conflicts:
+            st.warning("⚠️ Potential conflicts detected:")
+            for conflict in conflicts:
+                st.write(f"- {conflict}")
+        else:
+            st.success("✅ No conflicts detected.")
     else:
         st.warning("Add pets and tasks first.")

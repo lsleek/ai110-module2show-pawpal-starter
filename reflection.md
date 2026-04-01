@@ -77,8 +77,8 @@ The three core actions a user should be able to perform in PawPal+ are: 1. Add a
 
 **b. Judgment and verification**
 
-- Describe one moment where you did not accept an AI suggestion as-is.
-- How did you evaluate or verify what the AI suggested?
+- One moment where I did not accept an AI suggestion as-is was during the implementation of recurring tasks. The initial approach suggested moving the mark_complete logic entirely to the Owner class, but I kept it in Pet for better encapsulation, as each pet manages its own tasks. I evaluated this by considering the single responsibility principle and testing that the logic worked correctly.
+- I evaluated AI suggestions by running the code, checking test results, and ensuring the code remained readable and maintainable. For complex logic, I would break it down and test incrementally.
 
 ---
 
@@ -86,17 +86,24 @@ The three core actions a user should be able to perform in PawPal+ are: 1. Add a
 
 **a. What you tested**
 
-- What behaviors did you test?
-- Why were these tests important?
+- I tested core behaviors including task creation, pet management, sorting by time, filtering by status and pet, recurring task generation, conflict detection, and schedule generation with time constraints.
+- These tests were important because they verify that all algorithmic features work correctly and handle edge cases like empty systems or completed tasks, ensuring the system is reliable for real use.
 
 **b. Confidence**
 
-- How confident are you that your scheduler works correctly?
-- What edge cases would you test next if you had more time?
+- I am highly confident (5/5) that the scheduler works correctly because all 11 automated tests pass, covering both happy paths and edge cases. The system consistently handles sorting, filtering, recurring tasks, and conflict detection.
+- If I had more time, I would test overlapping time slots (assigning actual start times), multi-pet scheduling conflicts, and user input validation in the UI.
 
 ---
 
 ## 5. Reflection
+
+**AI Strategy Reflection:**
+
+- The most effective Copilot features were inline chat for code generation and debugging, the terminal tool for running tests and commands, and semantic search for understanding existing code. These helped me implement algorithms quickly and catch issues early.
+- One example of rejecting an AI suggestion was when it proposed a complex conflict detection algorithm using time intervals; I simplified it to date-based detection to keep the system lightweight and focused on the core requirements.
+- Using separate chat sessions for different phases helped me stay organized by keeping context focused on one aspect at a time, preventing confusion between implementation details.
+- As the lead architect collaborating with AI, I learned to guide the tools toward my vision while leveraging their speed for implementation. I make the high-level design decisions, evaluate tradeoffs, and ensure the final system aligns with the project goals, while AI handles the detailed coding and suggestions. This partnership maximizes productivity while maintaining human oversight. 
 
 **a. What went well**
 
