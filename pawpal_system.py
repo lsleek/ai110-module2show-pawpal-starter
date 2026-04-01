@@ -77,7 +77,7 @@ class Scheduler:
 
     def generate_schedule(self) -> list[Task]:
         """Generate a schedule of tasks sorted by priority and time, fitting within available time."""
-        tasks = self.owner.get_all_tasks()
+        tasks = [t for t in self.owner.get_all_tasks() if not t.completed]
         # Sort by priority (higher first), then by duration (shorter first)
         tasks.sort(key=lambda t: (-t.priority, t.time))
         schedule = []

@@ -41,3 +41,29 @@ pip install -r requirements.txt
 5. Add tests to verify key behaviors.
 6. Connect your logic to the Streamlit UI in `app.py`.
 7. Refine UML so it matches what you actually built.
+
+## Testing PawPal+
+
+Run the test suite with:
+```bash
+python3 -m pytest tests/
+```
+
+The test suite covers:
+- Basic task and pet operations
+- Sorting tasks by duration
+- Filtering tasks by completion status and pet
+- Recurring task creation when marking tasks complete
+- Conflict detection for multiple tasks on the same date
+- Schedule generation that excludes completed tasks
+- Edge cases like no tasks or empty pets
+
+**Confidence Level:** ⭐⭐⭐⭐⭐ (5/5 stars) - All core behaviors are tested with comprehensive coverage including edge cases, and all tests pass consistently. The system handles sorting, filtering, recurring tasks, and conflict detection reliably. 
+
+## Project Structure
+
+- `pawpal_system.py`: Core classes (Task, Pet, Owner, Scheduler) and algorithms
+- `app.py`: Streamlit web interface
+- `main.py`: Terminal demo of the system
+- `tests/test_pawpal.py`: Automated test suite
+- `reflection.md`: Project reflection and design decisions
