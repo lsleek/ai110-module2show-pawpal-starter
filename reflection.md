@@ -8,38 +8,53 @@
 - What classes did you include, and what responsibilities did you assign to each?
 
 The initial UML design for PawPal+ includes four main classes: Pet, Owner, Task, and Scheduler. The Pet class holds basic pet information and provides methods to retrieve details. The Owner class manages owner information and preferences. The Task class represents individual care tasks with attributes for title, duration, and priority, along with methods to check priority. The Scheduler class handles the list of tasks and available time, with a method to generate a daily schedule.
-
 ```mermaid
 classDiagram
+    class Task {
+        +description: str
+        +time: int
+        +frequency: str
+        +priority: int
+        +completed: bool
+        +due_date: date
+        +__init__(description, time, frequency, priority, completed, due_date)
+        +mark_complete(): void
+    }
     class Pet {
-        +name: string
-        +species: string
-        +get_info(): string
+        +name: str
+        +species: str
+        +tasks: list[Task]
+        +__init__(name, species)
+        +add_task(task: Task): void
+        +get_tasks(): list[Task]
+        +mark_task_complete(task: Task): void
     }
     class Owner {
-        +name: string
-        +preferences: list[string]
-        +update_preferences(): void
-    }
-    class Task {
-        +title: string
-        +duration: int
-        +priority: int
-        +is_high_priority(): bool
+        +name: str
+        +pets: list[Pet]
+        +__init__(name)
+        +add_pet(pet: Pet): void
+        +get_all_tasks(): list[Task]
+        +get_tasks_by_status(completed: bool): list[Task]
+        +get_tasks_by_pet(pet_name: str): list[Task]
     }
     class Scheduler {
-        +tasks: list[Task]
-        +available_time: int
-        +generate_schedule(): list
+        +owner: Owner
+        +available_time_minutes: int
+        +__init__(owner, available_time)
+        +generate_schedule(): list[Task]
+        +sort_tasks_by_time(): list[Task]
+        +detect_conflicts(): list[str]
     }
-    Owner ||--|| Pet : owns
-    Scheduler ||--o{ Task : manages
+
+    Owner --> Pet : owns
+    Pet --> Task : has
+    Scheduler --> Owner : uses
 ```
 
 **b. Design changes**
 
-- Did your design change during implementation?
-- If yes, describe at least one change and why you made it.
+- Yes, my design changed significantly during implementation. Initially, I planned for simple classes without advanced features, but as I built the algorithms, I added attributes like `due_date` to the Task class to support recurring tasks, and new methods like `get_tasks_by_status` and `get_tasks_by_pet` to the Owner class for filtering. I also moved the `mark_complete` logic from Task to Pet to handle recurring task creation properly. These changes were necessary to make the system more functional and user-friendly, evolving from a basic scheduler to a smart pet care assistant.
 
 **c. Core User Actions**
 
@@ -58,8 +73,8 @@ The three core actions a user should be able to perform in PawPal+ are: 1. Add a
 
 **a. Constraints and priorities**
 
-- What constraints does your scheduler consider (for example: time, priority, preferences)?
-- How did you decide which constraints mattered most?
+- My scheduler considers several key constraints: the available time in hours (converted to minutes), task priorities (higher numbers mean higher priority), and task completion status (only incomplete tasks are scheduled). It also respects the due dates for conflict detection.
+- I decided on these constraints based on the project requirements, which emphasized time management, priority handling, and ensuring only relevant tasks are included. Time and priority were the most critical because they directly impact the scheduling algorithm's effectiveness, while completion status ensures the schedule stays current.
 
 **b. Tradeoffs**
 
@@ -72,8 +87,8 @@ The three core actions a user should be able to perform in PawPal+ are: 1. Add a
 
 **a. How you used AI**
 
-- How did you use AI tools during this project (for example: design brainstorming, debugging, refactoring)?
-- What kinds of prompts or questions were most helpful?
+- I used AI tools extensively throughout the project for design brainstorming (like suggesting algorithm ideas), debugging (identifying why tests failed), and refactoring (simplifying code for readability). For example, I asked Copilot to help implement sorting and filtering methods, generate test cases, and even write documentation.
+- The most helpful prompts were specific and contextual, such as "How can I sort a list of Task objects by their time attribute?" or "Why is this test failing and how can I fix it?" These targeted questions led to actionable, high-quality suggestions that saved time and improved code quality.
 
 **b. Judgment and verification**
 
@@ -107,12 +122,12 @@ The three core actions a user should be able to perform in PawPal+ are: 1. Add a
 
 **a. What went well**
 
-- What part of this project are you most satisfied with?
+- I'm most satisfied with how the backend logic integrated seamlessly with the Streamlit UI, creating a functional app that actually helps users manage pet care tasks. The step-by-step development process, guided by AI, resulted in a system that's both smart and user-friendly.
 
 **b. What you would improve**
 
-- If you had another iteration, what would you improve or redesign?
+- If I had another iteration, I would improve the UI by adding more interactive features like drag-and-drop task reordering, better error handling for invalid inputs, and perhaps notifications for upcoming tasks. I'd also expand the backend to handle overlapping time slots and multi-pet conflicts more robustly.
 
 **c. Key takeaway**
 
-- What is one important thing you learned about designing systems or working with AI on this project?
+- One important thing I learned is the value of iterative design and thorough testing when working with AI. AI can accelerate development, but human judgment is crucial for making design decisions that ensure the system is maintainable, user-focused, and aligned with real-world needs. It's about balancing AI's speed with thoughtful architecture.

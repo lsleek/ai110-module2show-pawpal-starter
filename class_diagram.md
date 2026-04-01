@@ -37,7 +37,7 @@ classDiagram
         +detect_conflicts(): list[str]
     }
 
-    Owner ||--o{ Pet : owns
-    Pet ||--o{ Task : has
+    Owner --> Pet : owns
+    Pet --> Task : has
     Scheduler --> Owner : uses
 ```
